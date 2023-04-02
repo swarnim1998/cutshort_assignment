@@ -8,9 +8,16 @@ const ToDo = require('../models/todo')
 //constants
 const { CREATE_TODO_SCHEMA, UPDATE_TODO_SCHEMA, QUERY_SCHEMA } = require('../validations/joi')
 
+/**
+ * @define returns todo list data
+ * @param {*} profile 
+ * @param {*} query 
+ */
 module.exports.getToDos = async (profile, query) => {
     try {
         const pipeline = []
+
+        /**to get the data for a specific todo list or for a specific user*/
         if (query?.id) {
             pipeline.push({
                 $match: {
@@ -111,6 +118,11 @@ module.exports.getToDos = async (profile, query) => {
     }
 }
 
+/**
+ * @define creates todolist 
+ * @param {*} profile 
+ * @param {*} body 
+ */
 module.exports.createToDo = async (profile, body) => {
     try {
         await CREATE_TODO_SCHEMA.validateAsync(body)
@@ -127,6 +139,11 @@ module.exports.createToDo = async (profile, body) => {
     }
 }
 
+/**
+ * @define updates todo
+ * @param {*} query 
+ * @param {*} body 
+ */
 module.exports.updateToDo = async (query, body) => {
     try {
         await QUERY_SCHEMA.validateAsync(query)
@@ -138,6 +155,10 @@ module.exports.updateToDo = async (query, body) => {
     }
 }
 
+/**
+ * @define deletes todo
+ * @param {*} query 
+ */
 module.exports.deleteToDo = async (query) => {
     try {
         await QUERY_SCHEMA.validateAsync(query)

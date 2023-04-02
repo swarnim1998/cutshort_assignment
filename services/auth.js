@@ -18,6 +18,10 @@ async function validateSignUp(body) {
     }
 }
 
+/**
+ * @define: This function is used in validating the login request body
+ * @param {*} body 
+ */
 async function validateLogin(body) {
     let type
     try {
@@ -58,6 +62,10 @@ function validateToken(token, key) {
     })
 }
 
+/**
+ * @define This function used to validate authToken which comes in each request
+ * @param {*} token 
+ */
 module.exports.validate = async (token) => {
     try {
         if (!token) { throw new HttpError(401, 'Authorisation Token was not present in the header.') }
@@ -83,6 +91,10 @@ module.exports.validate = async (token) => {
     }
 }
 
+/**
+ * 
+ * @param {} body 
+ */
 module.exports.signUp = async (body) => {
     try {
         await USER_SIGNUP_SCHEMA.validateAsync()
@@ -100,6 +112,11 @@ module.exports.signUp = async (body) => {
     }
 }
 
+/**
+ * 
+ * @param {*} body 
+ * @response returns authToken and refresh token
+ */
 module.exports.signIn = async (body) => {
     try {
         const credential = await validateLogin(body)
@@ -111,6 +128,33 @@ module.exports.signIn = async (body) => {
         let refreshToken = await processToken({ user: credential.user }, key, { expiresIn: refreshTokenExpiry.diff(timeNow, 'seconds') })
         await User.updateOne({ user: body.user }, { $set: { 'lastLogin': Moment.utc().toISOString() } }, {})
         return { authToken, refreshToken }
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}
+
+/**
+ * 
+ * @param {*} token 
+ * @response: returns auth token
+ */
+module.exports.reIssueToken = async (token) => {
+    try {
+        /**checking token is present or not */
+        if(!token){
+            throw new HttpError(403, 'refresh Token are not present.')
+        } 
+        let key = process.env.authKey || authKey
+
+        /**validating refresh token */
+        token = await validateToken(token, key)
+        let timeNow = Moment.utc().millisecond(0)
+        let authTokenExpiry = Moment.utc(timeNow).add(1, 'day').hour(0).minute(0).second(0)
+        
+        /**generating new authToken */
+        let authToken = await processToken({ user: token.user }, key, { expiresIn: authTokenExpiry.diff(timeNow, 'seconds') })
+        return { authToken }
     } catch (error) {
         console.log(error)
         throw error

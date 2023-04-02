@@ -2,7 +2,7 @@ const Express = require('express')
 const Router = Express.Router()
 
 //services
-const {signUp, signIn} = require('../services/auth')
+const {signUp, signIn, reIssueToken} = require('../services/auth')
 
 Router.post('/signup', async (req, res, next) => {
     try {
@@ -23,4 +23,15 @@ Router.post('/signIn', async (req, res, next) => {
         res.status(400).send(error);
     }
 })
+
+Router.post('/reIssueToken', async (req, res, next) => {
+    try {
+        const token = req.headers['refresh-token']
+        const result = await reIssueToken(token);
+        res.status(200).send(result)
+    } catch (error) {
+        res.status(400).send(error);
+    }
+})
+
 module.exports = Router

@@ -10,6 +10,11 @@ const PostComment = require('../models/postComment')
 //constants
 const { CREATE_POST_SCHEMA, POST_COMMENT_SCHEMA, UPDATE_POST_SCHEMA, QUERY_SCHEMA } = require('../validations/joi')
 
+/**
+ * @define This function used to create posts
+ * @param {*} profile 
+ * @param {*} body 
+ */
 module.exports.createPost = async (profile, body) => {
     try {
         await CREATE_POST_SCHEMA.validateAsync(body)
@@ -25,6 +30,10 @@ module.exports.createPost = async (profile, body) => {
     }
 }
 
+/**
+ * @define It returns posts data
+ * @param {*} profile 
+ */
 module.exports.getPosts = (profile) => {
     try {
         return Post.aggregate([
@@ -88,12 +97,18 @@ module.exports.getPosts = (profile) => {
     }
 }
 
+/**
+ * @define It is used to make comments on posts
+ * @param {*} profile 
+ * @param {*} query 
+ * @param {*} body 
+ */
 module.exports.comment = async (profile, query, body) => {
     try {
         await QUERY_SCHEMA.validateAsync(query)
         await POST_COMMENT_SCHEMA.validateAsync(body)
 
-        /**valiating post exist or not */
+        /**validating post exist or not */
         const post = await Post.findOne({ _id: new ObjectId(query.id) }, { _id: 1 }, { lean: true })
         if (!post) {
             throw new HttpError(422, 'Post does not exist.')
@@ -111,6 +126,10 @@ module.exports.comment = async (profile, query, body) => {
     }
 }
 
+/**
+ * @define Returns all the comments of a post
+ * @param {*} query 
+ */
 module.exports.getComments = async (query) => {
     try {
         await QUERY_SCHEMA.validateAsync(query)
@@ -168,10 +187,22 @@ module.exports.getComments = async (query) => {
     }
 }
 
+/**
+ * 
+ * @param {*} query 
+ * @param {*} body 
+ */
 module.exports.updatePost = async (query, body) => {
     try {
         await QUERY_SCHEMA.validateAsync(query)
         await UPDATE_POST_SCHEMA.validateAsync(body)
+
+        /**validating post exist or not */
+        const post = await Post.findOne({ _id: new ObjectId(query.id) }, { _id: 1 }, { lean: true })
+        if (!post) {
+            throw new HttpError(422, 'Post does not exist.')
+        }
+
         await Post.updateOne({ _id: new ObjectId(query.id) }, { $set: { ...body } })
         return "ToDo Successfully Updated"
     } catch (error) {
