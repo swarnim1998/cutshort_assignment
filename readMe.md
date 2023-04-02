@@ -29,8 +29,6 @@ request:- {
   })
 }   
   
-response: "User created successfully"
-
 2. SignIn:- 
 request:- {
   'method': 'POST',
@@ -74,12 +72,11 @@ request:- {
   })
 } 
 
-response:- ToDo List Successfully Created
-
 2. fetch ToDo lists
+//To get all the todos remove userId from url query
 request:-  {
   'method': 'GET',
-  'url': 'http://localhost:3002/api/todo',
+  'url': 'http://localhost:3002/api/todo?userId=6427ddcd343e21071e3bc737&page=1',
   'headers': {
     'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicmFqIiwiaWF0IjoxNjgwNDE1NzU2LCJleHAiOjE2ODA0ODAwMDB9.5Imz1Uyvcq7kkQpB4Yh2UcE2jUPZydJ3YphWuvUueEk',
     'Content-Type': 'application/json'
@@ -142,7 +139,7 @@ request:- {
 2. Fetch Posts
 request:- {
   'method': 'GET',
-  'url': 'http://localhost:3002/api/post',
+  'url': 'http://localhost:3002/api/post?page=1',
   'headers': {
     'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoicmFqIiwiaWF0IjoxNjgwNDE1NzU2LCJleHAiOjE2ODA0ODAwMDB9.5Imz1Uyvcq7kkQpB4Yh2UcE2jUPZydJ3YphWuvUueEk',
     'Content-Type': 'application/json'
@@ -168,7 +165,7 @@ request:- {
   'method': 'POST',
   'url': 'http://localhost:3002/api/post/comment?id=64291f39a24710b51107c6f6',
   'headers': {
-    'auth-token': '',
+    'auth-token': 'ksadlsaldsmsdsm',
     'Content-Type': 'application/json'
   },    
   body: JSON.stringify({
@@ -179,9 +176,9 @@ request:- {
 5. Fetch comments of a post
 request:- {
   'method': 'GET',
-  'url': 'http://localhost:3002/api/post/comment?id=64291f39a24710b51107c6f6',
+  'url': 'http://localhost:3002/api/post/comment?id=64291f39a24710b51107c6f6&page=1',
   'headers': {
-    'auth-token': '',
+    'auth-token': 'sdsadsad',
     'Content-Type': 'application/json'
   }
 }

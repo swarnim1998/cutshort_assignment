@@ -8,7 +8,7 @@ Router.get('/', async (req, res, next) => {
     try {
         if(!res.locals.status){
             res.locals.status = {
-                content:  await getPosts()
+                content: await getPosts(req.profile, req.query)
             }
         }
     } catch (error) {

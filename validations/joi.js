@@ -36,7 +36,8 @@ const UPDATE_TODO_SCHEMA = Joi.object({
 })
 
 const QUERY_SCHEMA = Joi.object({
-    id: Joi.string().required()
+    id: Joi.string().required(),
+    page: Joi.number().optional()
 })
 
 const POST_COMMENT_SCHEMA = Joi.object({

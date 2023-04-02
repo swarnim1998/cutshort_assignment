@@ -32,6 +32,8 @@ module.exports.getToDos = async (profile, query) => {
             })
         }
 
+        const skip = (query.page -1) * 5
+        const limit = 5 
         const response = await ToDo.aggregate([
             ...pipeline,
             {
@@ -109,6 +111,12 @@ module.exports.getToDos = async (profile, query) => {
                     editable: '$editable',
                     lastUpdate: '$lastUpdate'
                 }
+            },
+            {
+                $skip: skip
+            },
+            {
+                $limit: limit
             }
         ]).allowDiskUse(true)
         return response

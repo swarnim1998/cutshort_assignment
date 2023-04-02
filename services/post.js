@@ -9,6 +9,7 @@ const PostComment = require('../models/postComment')
 
 //constants
 const { CREATE_POST_SCHEMA, POST_COMMENT_SCHEMA, UPDATE_POST_SCHEMA, QUERY_SCHEMA } = require('../validations/joi')
+const { query } = require('express')
 
 /**
  * @define This function used to create posts
@@ -34,8 +35,10 @@ module.exports.createPost = async (profile, body) => {
  * @define It returns posts data
  * @param {*} profile 
  */
-module.exports.getPosts = (profile) => {
+module.exports.getPosts = (profile, query) => {
     try {
+        const skip = (query.page -1) * 5
+        const limit = 5
         return Post.aggregate([
             {
                 $addFields: {
@@ -89,6 +92,12 @@ module.exports.getPosts = (profile) => {
                     editable: '$editable',
                     stamp: '$stamp'
                 }
+            },
+            {
+                $skip: skip
+            },
+            {
+                $limit: limit
             }
         ])
     } catch (error) {
@@ -133,6 +142,9 @@ module.exports.comment = async (profile, query, body) => {
 module.exports.getComments = async (query) => {
     try {
         await QUERY_SCHEMA.validateAsync(query)
+       
+        const skip = (query.page -1) * 5
+        const limit = 5 
         return PostComment.aggregate([
             {
                 $match: {
@@ -180,6 +192,12 @@ module.exports.getComments = async (query) => {
                     createdBy: '$users.user',
                     stamp: '$stamp'
                 }
+            },
+            {
+                $skip: skip
+            },
+            {
+                $limit: limit
             }
         ])
     } catch (error) {
