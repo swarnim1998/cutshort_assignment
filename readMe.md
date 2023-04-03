@@ -1,17 +1,17 @@
 # cutshort code challenge
 
+Hosted link:- https://dbbe-2401-4900-1c08-2a47-a4de-6753-9ab0-9500.ngrok.io
 Completed tasks:- 
 1. SignUp and SignIn api's using jwt token.
 2. Refresh Token task.
 3. ToDo list api's with the same requirement mentioned in document.
 4. Post and comments api's with the same requirement mentioned in document.
-5. Not implemented testcases due to limited time
 
 Instructions:-
 1. Run npm install command 
 2. To run the server in local run bellow command
    npm run local
-3. Call the api's in the same format mentioned below   
+3. Call the api's in the same format mentioned below or use the postman api
    
 Apis:- 
 // Authentication apis
